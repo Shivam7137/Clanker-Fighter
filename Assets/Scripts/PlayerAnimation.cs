@@ -14,8 +14,11 @@ public class PlayerAnimation : MonoBehaviour
     public float runAnimationSpeed = 0.1f; // --- NEW: Frequency for switching run frames ---
     public Sprite jumpSprite;
     public Sprite wallRunSprite;
-    public Sprite attackSprite;
-    public float attackAnimationTime = 0.5f;
+    // legacy generic attack slot removed; use Punch/Kick slots instead
+    public Sprite punchSprite;
+    public float punchAnimationTime = 0.25f;
+    public Sprite kickSprite;
+    public float kickAnimationTime = 0.5f;
     public Sprite hurtSprite;
     public float hurtAnimationTime = 0.5f;
 
@@ -40,6 +43,7 @@ public class PlayerAnimation : MonoBehaviour
     private bool isWallSliding;
     private bool isAttacking = false;
     private bool isHurt = false;
+    private Sprite currentAttackSprite = null;
 
     // --- NEW: Animation state variables ---
     private int currentRunFrameIndex = 0;
@@ -98,7 +102,8 @@ public class PlayerAnimation : MonoBehaviour
 
         if (isAttacking)
         {
-            spriteRenderer.sprite = attackSprite;
+            if (currentAttackSprite != null)
+                spriteRenderer.sprite = currentAttackSprite;
             return;
         }
 
@@ -130,20 +135,46 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
-    // --- Input System Callback ---
-    public void OnAttack(InputValue value)
+    // (OnAttack removed — attacks use Punch/Kick inputs now)
+
+    // Public API: play an attack animation by type: "Punch", "Kick", or "Default"
+    public void PlayAttack(string attackType)
     {
-        if (value.isPressed && !isAttacking)
+        Sprite spriteToUse = null;
+        float duration = 0f;
+
+        if (attackType == "Punch")
         {
-            StartCoroutine(AttackCoroutine());
+            spriteToUse = punchSprite;
+            duration = punchAnimationTime;
         }
+        else if (attackType == "Kick")
+        {
+            spriteToUse = kickSprite;
+            duration = kickAnimationTime;
+        }
+        else
+        {
+            // Unknown attack type — do nothing
+            return;
+        }
+
+        // restart attack if already attacking
+        try { StopCoroutine("AttackCoroutine"); } catch { }
+        StartCoroutine(AttackCoroutine(duration, spriteToUse));
     }
 
-    private IEnumerator AttackCoroutine()
+    private IEnumerator AttackCoroutine(float duration, Sprite spriteToUse)
     {
         isAttacking = true;
-        yield return new WaitForSeconds(attackAnimationTime);
+        currentAttackSprite = spriteToUse;
+        if (spriteRenderer != null && currentAttackSprite != null)
+            spriteRenderer.sprite = currentAttackSprite;
+
+        yield return new WaitForSeconds(duration);
+
         isAttacking = false;
+        currentAttackSprite = null;
     }
 
     // Public API: play the hurt animation for a short duration

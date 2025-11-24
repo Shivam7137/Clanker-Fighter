@@ -8312,6 +8312,10 @@ MonoBehaviour:
   wallRunSprite: {fileID: 3391642820511892768, guid: 46d5d1f5e96d926498180c61a745cfa7, type: 3}
   attackSprite: {fileID: 6276856419454211490, guid: 0f31d92b426708146a452c4373d369c7, type: 3}
   attackAnimationTime: 0.2
+  punchSprite: {fileID: 763359042379071531, guid: c30a843f7256c7b46bc86c6e1b4e1141, type: 3}
+  punchAnimationTime: 0.25
+  kickSprite: {fileID: 7005870261906294342, guid: 8b3740f1e37f86a4ba691dd1f4428415, type: 3}
+  kickAnimationTime: 0.5
   hurtSprite: {fileID: 6242081796883805069, guid: ef78726583893604980f884c2492ca0a, type: 3}
   hurtAnimationTime: 0.2
   spriteTransform: {fileID: 247879919}

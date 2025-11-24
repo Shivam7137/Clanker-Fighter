@@ -174,6 +174,13 @@ public class BossCar : MonoBehaviour
         {
             bool damaged = pc.TakeDamage(contactDamage, "BossContact");
 
+            // If the player died inside TakeDamage it may have been deactivated —
+            // avoid calling ApplyKnockback or starting coroutines on an inactive object.
+            if (!pc.gameObject.activeInHierarchy)
+            {
+                return;
+            }
+
             // Apply knockback only if damage was applied
             if (damaged && pm != null)
             {

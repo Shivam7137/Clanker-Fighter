@@ -45,6 +45,8 @@ public class PlayerCombat : MonoBehaviour
     {
         if (value.isPressed)
         {
+            // Play punch animation
+            playerAnimation?.PlayAttack("Punch");
             PerformAttack(punchPoint, punchRange, punchDamage, "Punch");
         }
     }
@@ -53,6 +55,8 @@ public class PlayerCombat : MonoBehaviour
     {
         if (value.isPressed)
         {
+            // Play kick animation
+            playerAnimation?.PlayAttack("Kick");
             PerformAttack(kickPoint, kickRange, kickDamage, "Kick");
         }
     }
@@ -92,6 +96,9 @@ public class PlayerCombat : MonoBehaviour
         currentHealth -= amount;
         Debug.Log($"<color=red>PLAYER HURT:</color> Took {amount} damage from {source}. HP: {currentHealth}/{maxHealth}");
 
+        // Immediately mark invulnerable to prevent other hits in the same frame
+        isInvulnerable = true;
+
         // Trigger hurt animation if available
         playerAnimation?.PlayHurt();
         // Lock player input for hurt duration if movement component exists
@@ -116,13 +123,11 @@ public class PlayerCombat : MonoBehaviour
     {
         if (spriteRenderer == null)
         {
-            isInvulnerable = true;
+            // sprite absent: just wait and then clear invulnerability
             yield return new WaitForSeconds(invulDuration);
             isInvulnerable = false;
             yield break;
         }
-
-        isInvulnerable = true;
 
         float elapsed = 0f;
         float flashInterval = 0.1f;
