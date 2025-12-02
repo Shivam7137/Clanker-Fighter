@@ -67,6 +67,13 @@ public class PlayerCombat : MonoBehaviour
         // Visual log for the player action
         Debug.Log($"<color=cyan>PLAYER ACTION:</color> Performed {attackType} (Damage: {damage})");
 
+        // Trigger Frenzy Visual Effect if active
+        PlayerFrenzy frenzy = GetComponent<PlayerFrenzy>();
+        if (frenzy != null && frenzy.IsFrenzyActive)
+        {
+            frenzy.PlayAttackEffect(attackType, attackPoint.position);
+        }
+
         // Detect enemies
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, range, enemyLayer);
 

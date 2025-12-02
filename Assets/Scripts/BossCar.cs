@@ -112,7 +112,7 @@ public class BossCar : MonoBehaviour
         }
         
         // 2. DAMAGE LOGIC (Kick/Punch)
-        else if (type == "Kick" || type == "Punch")
+        else if (type == "Kick" || type == "Punch" || type == "FrenzyAttack")
         {
             if (isStunned)
             {
