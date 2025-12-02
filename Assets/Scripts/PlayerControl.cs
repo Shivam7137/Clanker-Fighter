@@ -286,6 +286,12 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(TemporaryInputLock(duration));
     }
 
+    // Public helper to reset double jump (used by GrapplingHook)
+    public void ResetDoubleJump()
+    {
+        canDoubleJump = true;
+    }
+
     private void OnDrawGizmos()
     {
         if (groundCheck != null)
